@@ -41,55 +41,6 @@
 # parent_child
 
 ## mapping
-{
-  "mappings": {
-    "user": {
-      "properties": {
-        "id": {"type": "integer"},
-        "age": {"type": "integer"},
-        "state_id": {"type": "integer"},
-        "is_accept_mail": {"type": "boolean"},
-        "first_puchased_on": {"type": "date"},
-        "last_puchased_on": {"type": "date"},
-        "created_at": {"type": "date"}
-      }
-    },
-    "order": {
-      "_parent": {
-        "type": "user"
-      },
-      "properties": {
-        "id": {"type": "integer"},
-        "total": {"type": "double"},
-        "created_at": {"type": "date"},
-        "order_items": {
-          "type": "nested",
-          "properties": {
-            "product_id": {"type": "integer"},
-            "course_id": {"type": "integer"},
-            "quantity": {"type": "integer"}
-          }
-        }
-      }
-    },
-    "course_order": {
-      "_parent": {
-        "type": "user"
-      },
-      "properties": {
-        "id": {"type": "integer"},
-        "created_at": {"type": "date"},
-        "order_items": {
-          "type": "nested",
-          "properties": {
-            "course_id": {"type": "integer"},
-            "quantity": {"type": "integer"}
-          }
-        }
-      }
-    }
-  }
-}
 
 # nested
 
