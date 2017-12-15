@@ -26,7 +26,7 @@ ORDER_INDEX= '{
         "total": {"type": "double"},
         "product_ids": {"type": "string", "index": "not_analyzed"},
         "course_ids": {"type": "string", "index": "not_analyzed"},
-        "created_at": {"type": "date"},
+        "ordered_on": {"type": "date"},
         "user_id": {"type": "integer"}
       }
     }
@@ -42,7 +42,7 @@ COURSE_ORDER_INDEX = '{
         "status": {"type": "integer"},
         "latest_continuation_times": {"type": "integer"},
         "course_ids": {"type": "string", "index": "not_analyzed"},
-        "created_at": {"type": "date"},
+        "ordered_on": {"type": "date"},
         "user_id": {"type": "integer"}
       }
     }
@@ -50,7 +50,7 @@ COURSE_ORDER_INDEX = '{
 }'
 
 
-SUMMARY_INDEX = '{
+PARENT_CHILD_SUMMARY_INDEX = '{
   "mappings": {
     "segment": {
       "dynamic": "strict",
@@ -72,10 +72,29 @@ SUMMARY_INDEX = '{
   }
 }'
 
+NESTED_SUMMARY_INDEX = '{
+  "mappings": {
+    "user_segment_group": {
+      "dynamic": "strict",
+      "properties": {
+        "user_id": {"type": "integer"},
+        "true_segment_groups": {
+          "type": "nested",
+          "dynamic": "strict",
+          "properties": {
+            "id": {"type": "integer"},
+            "is_match": {"type": "boolean"}
+          }
+        }
+      }
+    }
+  }
+}'
+
 user_mapping = JSON.parse(USER_INDEX, {:symbolize_names => true})
 order_mapping = JSON.parse(ORDER_INDEX, {:symbolize_names => true})
 course_order_mapping = JSON.parse(COURSE_ORDER_INDEX, {:symbolize_names => true})
-summary_mapping = JSON.parse(SUMMARY_INDEX, {:symbolize_names => true})
+summary_mapping = JSON.parse(NESTED_SUMMARY_INDEX, {:symbolize_names => true})
 
 client = Elasticsearch::Client.new log: true
 client.transport.reload_connections!
